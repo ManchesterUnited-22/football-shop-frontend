@@ -1,0 +1,10 @@
+// store-frontend/app/services/socket.ts
+import io, { Socket } from "socket.io-client";
+
+export function createOrderSocket(getAccessToken: () => string): Socket {
+  const token = getAccessToken();
+  return io("http://localhost:3000", {
+    transports: ["websocket"],
+    auth: { token },
+  });
+}

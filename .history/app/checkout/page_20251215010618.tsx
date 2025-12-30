@@ -1,0 +1,1 @@
+<form id="checkout-form" onSubmit={handleSubmitOrder} className="lg:col-span-2 bg-white p-6 shadow-xl rounded-lg border"></form>

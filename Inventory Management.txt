@@ -1,0 +1,48 @@
+@startuml ActivityDiagram_ManageProduct
+skinparam ArrowColor #00AA00
+skinparam ActivityEndColor #00AA00
+skinparam ActivityStartColor #00AA00
+title Biểu đồ Hoạt động - Quản lý Sản phẩm
+
+|Admin|
+start
+:Đăng nhập hệ thống Admin;
+:Chọn mục "Quản lý Sản phẩm";
+
+|Frontend|
+:Hiển thị Form Thêm/Sửa Sản phẩm;
+
+|Admin|
+:Nhập thông tin cơ bản (Tên, Mô tả, Giá, Danh mục);
+:Nhập Ảnh sản phẩm;
+
+|Frontend|
+:Gửi Product data (ProductService);
+
+|Backend Service|
+:Xác thực dữ liệu Product;
+:Lưu Product vào DB;
+
+|Frontend|
+if (Cần thêm Biến thể?) then (yes)
+    :Hiển thị Form thêm Variant;
+    
+    |Admin|
+    repeat
+        :Nhập Size/Màu, Giá điều chỉnh, Tồn kho;
+        
+        |Frontend|
+        :Gửi Variant data (VariantService);
+        
+        |Backend Service|
+        :Lưu Variant (liên kết với Product ID vừa tạo);
+    repeat while (Tiếp tục thêm Variant?)
+else (no)
+endif
+
+|Frontend|
+:Thông báo "Lưu sản phẩm thành công";
+
+|Admin|
+end
+@enduml
