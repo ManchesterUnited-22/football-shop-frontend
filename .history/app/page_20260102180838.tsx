@@ -1,10 +1,26 @@
 "use client";
+import { apiFetch } from "./utils/apiFetch";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Range, getTrackBackground } from "react-range";
 import Image from "next/image";
 import { Facebook, MessageCircle } from "lucide-react"; // Icon Zalo dùng MessageCircle (gợi hình chat)
 
+async function fetchProducts() {
+  const params = new URLSearchParams();
+  if (categoryId) params.append("categoryId", categoryId.toString());
+  if (searchQuery) params.append("q", searchQuery);
+  params.append("minPrice", values[0].toString());
+  params.append("maxPrice", values[1].toString());
+
+  try {
+    // Dùng apiFetch giúp tự động nhận link từ .env và xử lý lỗi chuyên nghiệp hơn
+    const data = await apiFetch<Product[]>(`/products?${params.toString()}`);
+    setProducts(data);
+  } catch (error) {
+    console.error("Lỗi fetch:", error);
+  }
+}
 // Interface & Data
 interface Product {
   id: number;
@@ -177,9 +193,7 @@ export default function Home() {
       params.append("minPrice", values[0].toString());
       params.append("maxPrice", values[1].toString());
 
-     // Sử dụng biến môi trường tương tự như các file khác
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-    const url = `${backendUrl}/products?${params.toString()}`;
+      const url = `http://localhost:3001/products?${params.toString()}`;
       try {
         const res = await fetch(url, { cache: "no-store" });
         const data = await res.json();

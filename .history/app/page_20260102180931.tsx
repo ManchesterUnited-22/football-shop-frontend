@@ -178,8 +178,8 @@ export default function Home() {
       params.append("maxPrice", values[1].toString());
 
      // Sử dụng biến môi trường tương tự như các file khác
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-    const url = `${backendUrl}/products?${params.toString()}`;
+const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const url = `${backendUrl}/products?${params.toString()}`;
       try {
         const res = await fetch(url, { cache: "no-store" });
         const data = await res.json();

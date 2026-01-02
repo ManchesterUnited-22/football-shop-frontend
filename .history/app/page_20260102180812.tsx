@@ -1,4 +1,5 @@
 "use client";
+import { apiFetch } from "../../utils/apiFetch";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Range, getTrackBackground } from "react-range";
@@ -177,9 +178,7 @@ export default function Home() {
       params.append("minPrice", values[0].toString());
       params.append("maxPrice", values[1].toString());
 
-     // Sử dụng biến môi trường tương tự như các file khác
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-    const url = `${backendUrl}/products?${params.toString()}`;
+      const url = `http://localhost:3001/products?${params.toString()}`;
       try {
         const res = await fetch(url, { cache: "no-store" });
         const data = await res.json();
