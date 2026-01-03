@@ -22,4 +22,4 @@ const nextConfig = {
   // Các cấu hình bổ sung khác nếu cần (ví dụ: output: 'standalone') có thể thêm ở đây
 };
 
-export default nextConfig;
+module.exports = nextConfig;
