@@ -172,18 +172,6 @@ const InventoryReportPage = () => {
       setError(err.message);
     }
   };
-  const fetchSalesData = async () => {
-    setLoading(true);
-    try {
-      const endpoint = `/reports/sales-performance?type=${salesType}&period=${salesPeriod}&limit=${salesLimit}`;
-      const data = await apiFetch<SalesPerformanceItem[]>(endpoint);
-      setSalesReportData(data);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
 
   // Effects
@@ -197,7 +185,18 @@ const InventoryReportPage = () => {
   }, [authLoading, isAuthenticated, threshold, limit, selectedCategory, salesType, salesPeriod, salesLimit]);
 
   if (authLoading || loading) {
-    return (
+    return (const fetchSalesData = async () => {
+    setLoading(true);
+    try {
+      const endpoint = `/reports/sales-performance?type=${salesType}&period=${salesPeriod}&limit=${salesLimit}`;
+      const data = await apiFetch<SalesPerformanceItem[]>(endpoint);
+      setSalesReportData(data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-emerald-500 border-t-transparent mb-6"></div>

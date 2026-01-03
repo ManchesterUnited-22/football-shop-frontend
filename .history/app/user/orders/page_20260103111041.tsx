@@ -65,11 +65,9 @@ export default function UserOrdersPage() {
   setError(null);
 
   try {
-    // THÊM <Order[]> VÀO ĐÂY
-    const data = await apiFetch<Order[]>('orders/me'); 
-    
-    // Bây giờ TypeScript đã biết data là Order[], lỗi sẽ biến mất
-    setOrders(data); 
+    // Sử dụng apiFetch giúp bạn không cần lo về localStorage hay baseURL nữa
+    const data = await apiFetch('/orders/me');
+    setOrders(data);
   } catch (err: any) {
     console.error('Lỗi tải đơn hàng:', err);
     setError(err.message || 'Không thể tải lịch sử đơn hàng.');

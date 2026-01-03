@@ -172,19 +172,23 @@ const InventoryReportPage = () => {
       setError(err.message);
     }
   };
+
   const fetchSalesData = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
+
     setLoading(true);
     try {
-      const endpoint = `/reports/sales-performance?type=${salesType}&period=${salesPeriod}&limit=${salesLimit}`;
-      const data = await apiFetch<SalesPerformanceItem[]>(endpoint);
-      setSalesReportData(data);
+      const url = `${API_URL}/reports/sales-performance?type=${salesType}&period=${salesPeriod}&limit=${salesLimit}`;
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) throw new Error('Lỗi tải báo cáo bán hàng');
+      setSalesReportData(await res.json());
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
-
 
   // Effects
   useEffect(() => {

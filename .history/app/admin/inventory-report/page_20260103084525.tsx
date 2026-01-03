@@ -34,7 +34,7 @@ interface Category {
   name: string;
 }
 
-
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const formatSize = (value: string): string => {
   if (!value || value.toUpperCase() === 'NONE') return '';
@@ -152,39 +152,51 @@ const InventoryReportPage = () => {
 
   // Fetch functions
   const fetchCategories = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
+
     try {
-      const data = await apiFetch<Category[]>('/categories');
-      setCategories(data);
+      const res = await fetch(`${API_URL}/categories`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) setCategories(await res.json());
     } catch (err) {
-      console.error("Lỗi lấy danh mục:", err);
+      console.error(err);
     }
   };
 
   const fetchLowStockData = async () => {
-    try {
-      // URL cực kỳ sạch sẽ, apiFetch sẽ tự xử lý dấu / dư thừa
-      let endpoint = `/reports/low-stock?threshold=${threshold}&limit=${limit}`;
-      if (selectedCategory) endpoint += `&categoryId=${selectedCategory}`;
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
 
-      const data = await apiFetch<LowStockItem[]>(endpoint);
-      setReportData(data);
+    let url = `${API_URL}/reports/low-stock?threshold=${threshold}&limit=${limit}`;
+    if (selectedCategory) url += `&categoryId=${selectedCategory}`;
+
+    try {
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) throw new Error('Lỗi tải báo cáo tồn kho');
+      setReportData(await res.json());
     } catch (err: any) {
       setError(err.message);
     }
   };
+
   const fetchSalesData = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) return;
+
     setLoading(true);
     try {
-      const endpoint = `/reports/sales-performance?type=${salesType}&period=${salesPeriod}&limit=${salesLimit}`;
-      const data = await apiFetch<SalesPerformanceItem[]>(endpoint);
-      setSalesReportData(data);
+      const url = `${API_URL}/reports/sales-performance?type=${salesType}&period=${salesPeriod}&limit=${salesLimit}`;
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) throw new Error('Lỗi tải báo cáo bán hàng');
+      setSalesReportData(await res.json());
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
-
 
   // Effects
   useEffect(() => {

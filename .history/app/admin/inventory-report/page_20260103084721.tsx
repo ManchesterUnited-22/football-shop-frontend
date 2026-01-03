@@ -172,7 +172,7 @@ const InventoryReportPage = () => {
       setError(err.message);
     }
   };
-  const fetchSalesData = async () => {
+const fetchSalesData = async () => {
     setLoading(true);
     try {
       const endpoint = `/reports/sales-performance?type=${salesType}&period=${salesPeriod}&limit=${salesLimit}`;
@@ -184,7 +184,6 @@ const InventoryReportPage = () => {
       setLoading(false);
     }
   };
-
 
   // Effects
   useEffect(() => {

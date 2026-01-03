@@ -13,27 +13,32 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
- const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError(null);
-  setIsLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
 
-  try {
-    // Dùng apiFetch thần thánh ở đây
-    await apiFetch('/auth/register', {
-      method: 'POST',
-      body: { email, password, fullName },
-    });
+    try {
+      const response = await apiFetch('auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, fullName }),
+      });
 
-    alert('✅ Đăng ký thành công! Bạn có thể đăng nhập ngay.');
-    router.push('/auth/login');
-  } catch (err: any) {
-    // apiFetch đã tự quăng Error kèm message từ backend rồi
-    setError(err.message);
-  } finally {
-    setIsLoading(false);
-  }
-};
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Đăng ký thất bại. Email có thể đã tồn tại.');
+      }
+
+      alert('Đăng ký thành công! Bạn có thể đăng nhập ngay.');
+      router.push('/auth/login');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="relative flex justify-center items-center min-h-screen bg-gray-950 px-4 overflow-hidden">

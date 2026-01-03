@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { useAuth } from '@/hook/useAuth';
 import { Package, Truck, CheckCircle, XCircle, Clock } from 'lucide-react';
-import { apiFetch} from '../../utils/apiFetch'
+import { apiFetch} from '../../utils'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
@@ -65,11 +65,9 @@ export default function UserOrdersPage() {
   setError(null);
 
   try {
-    // THÊM <Order[]> VÀO ĐÂY
-    const data = await apiFetch<Order[]>('orders/me'); 
-    
-    // Bây giờ TypeScript đã biết data là Order[], lỗi sẽ biến mất
-    setOrders(data); 
+    // Sử dụng apiFetch giúp bạn không cần lo về localStorage hay baseURL nữa
+    const data = await apiFetch('/orders/me');
+    setOrders(data);
   } catch (err: any) {
     console.error('Lỗi tải đơn hàng:', err);
     setError(err.message || 'Không thể tải lịch sử đơn hàng.');

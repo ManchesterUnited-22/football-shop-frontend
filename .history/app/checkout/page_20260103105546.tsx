@@ -6,7 +6,7 @@ import { useCart, CartItem } from '../context/CartContext';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Banknote, Truck, CreditCard, ShoppingBag } from 'lucide-react';
-import { apiFetch } from '../utils/apiFetch';
+import { apiFetch } from './utils/apiFetch';
 // Giả lập auth (giữ nguyên)
 const useAuth = () => {
   const MOCK_USER_LOGGED_IN = true;
@@ -109,23 +109,28 @@ export default function CheckoutPage() {
     const token = localStorage.getItem('access_token');
     setIsSubmitting(true);
 
-   try {
-    // Dùng apiFetch để tự động lấy URL từ .env (Localhost hoặc Vercel)
-    // apiFetch cũng đã tự xử lý đính kèm Bearer Token rồi nên code sẽ gọn hơn nhiều
-    const result = await apiFetch<{ id: string }>('/orders', {
-      method: 'POST',
-      body: orderPayload,
-    });
+    try {
+      const response = await fetch('http://localhost:3001/orders', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : ''
+        },
+        body: JSON.stringify(orderPayload),
+      });
 
-    clearCart();
-    // Chuyển hướng sau khi thành công
-    router.push(`/admin/order-confirmation/${result.id}`); 
-  } catch (error: any) {
-    alert(`❌ Lỗi: ${error.message || 'Vui lòng thử lại sau'}`);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+      if (!response.ok) throw new Error('Đặt hàng thất bại');
+      const result = await response.json();
+
+      clearCart();
+      router.push(`/admin/order-confirmation/${result.id}`);
+    } catch (error) {
+      alert(`❌ Lỗi: ${(error as Error).message || 'Vui lòng thử lại sau'}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-emerald-950 py-12 px-6">
       <div className="max-w-7xl mx-auto">

@@ -86,7 +86,7 @@ export default function OrderConfirmationPage() {
       return;
     }
 
-   
+    const fetchOrder = async () => {
      const fetchOrder = async () => {
       try {
         // ⭐️ 2. Thay thế toàn bộ fetch thuần bằng apiFetch

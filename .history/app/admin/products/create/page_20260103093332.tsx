@@ -138,7 +138,7 @@ export default function CreateProductPage() {
         const uploadData = await apiFetch<ImageResult>('/products/upload', {
           method: 'POST',
           body: formData,
-          
+          apiUrl: API_BASE_URL,
         });
 
         uploadedUrls.push({ url: uploadData.url });
@@ -197,7 +197,7 @@ export default function CreateProductPage() {
       await apiFetch<CreatedProduct>('/products', {
         method: 'POST',
         body: productData,
-        
+        apiUrl: API_BASE_URL,
       });
 
       alert('🎉 Sản phẩm đã được tạo thành công!');

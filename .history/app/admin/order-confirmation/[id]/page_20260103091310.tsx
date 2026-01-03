@@ -79,14 +79,14 @@ export default function OrderConfirmationPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  useEffect(() => {()
     if (!orderId || isNaN(orderId)) {
       setError("ID đơn hàng không hợp lệ.");
       setLoading(false);
       return;
     }
 
-   
+    const fetchOrder = async () => {
      const fetchOrder = async () => {
       try {
         // ⭐️ 2. Thay thế toàn bộ fetch thuần bằng apiFetch

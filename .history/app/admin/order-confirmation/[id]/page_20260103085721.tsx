@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { CheckCircle, CreditCard, ShoppingBag, ArrowLeft } from 'lucide-react';
-import { apiFetch } from '../../../utils/apiFetch';
+import { apiFetch } from '../../utils/apiFetch';
 
 type OrderDetail = {
   id: number;
@@ -86,16 +86,18 @@ export default function OrderConfirmationPage() {
       return;
     }
 
-   
-     const fetchOrder = async () => {
+    const fetchOrder = async () => {
       try {
-        // ⭐️ 2. Thay thế toàn bộ fetch thuần bằng apiFetch
-        // Không cần lấy token thủ công, apiFetch tự lo
-        const data = await apiFetch<OrderDetail>(`/orders/${orderId}`);
+        const token = localStorage.getItem('access_token');
+        const response = await fetch(`http://localhost:3001/orders/${orderId}`, {
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+        });
+
+        if (!response.ok) throw new Error("Không thể tải chi tiết đơn hàng.");
+        const data: OrderDetail = await response.json();
         setOrder(data);
-      } catch (err: any) {
-        // ⭐️ 3. Lấy message lỗi từ API trả về (nếu có)
-        setError(err.message || "Không thể tải chi tiết đơn hàng.");
+      } catch (err) {
+        setError((err as Error).message);
       } finally {
         setLoading(false);
       }

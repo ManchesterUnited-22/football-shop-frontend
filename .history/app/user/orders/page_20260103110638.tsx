@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { useAuth } from '@/hook/useAuth';
 import { Package, Truck, CheckCircle, XCircle, Clock } from 'lucide-react';
-import { apiFetch} from '../../utils/apiFetch'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
@@ -60,23 +59,42 @@ export default function UserOrdersPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
- const fetchOrders = useCallback(async () => {
-  setIsLoading(true);
-  setError(null);
+  const fetchOrders = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
 
-  try {
-    // THÊM <Order[]> VÀO ĐÂY
-    const data = await apiFetch<Order[]>('orders/me'); 
-    
-    // Bây giờ TypeScript đã biết data là Order[], lỗi sẽ biến mất
-    setOrders(data); 
-  } catch (err: any) {
-    console.error('Lỗi tải đơn hàng:', err);
-    setError(err.message || 'Không thể tải lịch sử đơn hàng.');
-  } finally {
-    setIsLoading(false);
-  }
-}, []);
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/orders/me`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (response.status === 401 || response.status === 403) {
+          throw new Error("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.");
+        }
+        throw new Error(errorData.message || `Lỗi server: ${response.status}`);
+      }
+
+      const data: Order[] = await response.json();
+      setOrders(data);
+    } catch (err: any) {
+      console.error('Lỗi tải đơn hàng:', err);
+      setError(err.message || 'Không thể tải lịch sử đơn hàng.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (isAuthLoading) return;

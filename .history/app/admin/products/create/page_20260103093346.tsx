@@ -197,7 +197,7 @@ export default function CreateProductPage() {
       await apiFetch<CreatedProduct>('/products', {
         method: 'POST',
         body: productData,
-        
+        apiUrl: API_BASE_URL,
       });
 
       alert('🎉 Sản phẩm đã được tạo thành công!');

@@ -30,7 +30,6 @@ interface Product {
 }
 
 async function getProduct(slug: string): Promise<Product | null> {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
   try {
     const res = await fetch(`http://localhost:3001/products/${slug}`, {
       cache: "no-store",

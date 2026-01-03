@@ -86,16 +86,17 @@ export default function OrderConfirmationPage() {
       return;
     }
 
-   
-     const fetchOrder = async () => {
+    const fetchOrder = async () => {
       try {
-        // ⭐️ 2. Thay thế toàn bộ fetch thuần bằng apiFetch
-        // Không cần lấy token thủ công, apiFetch tự lo
         const data = await apiFetch<OrderDetail>(`/orders/${orderId}`);
         setOrder(data);
-      } catch (err: any) {
-        // ⭐️ 3. Lấy message lỗi từ API trả về (nếu có)
-        setError(err.message || "Không thể tải chi tiết đơn hàng.");
+        });
+
+        if (!response.ok) throw new Error("Không thể tải chi tiết đơn hàng.");
+        const data: OrderDetail = await response.json();
+        setOrder(data);
+      } catch (err) {
+        setError((err as Error).message);
       } finally {
         setLoading(false);
       }

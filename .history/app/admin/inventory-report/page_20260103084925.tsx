@@ -184,6 +184,7 @@ const InventoryReportPage = () => {
       setLoading(false);
     }
   };
+  
 
 
   // Effects

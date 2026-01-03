@@ -184,6 +184,34 @@ const InventoryReportPage = () => {
       setLoading(false);
     }
   };
+  const handleRestockSubmit = async () => {
+    if (!selectedItem || newStockValue <= selectedItem.stock) return;
+
+    setLoading(true);
+    try {
+      // GIẢ SỬ BACKEND CÓ ENDPOINT NÀY, BẠN CÓ THỂ MỞ RA DÙNG THẬT LUÔN
+      // await apiFetch(`/inventory/restock/${selectedItem.id}`, { 
+      //   method: 'PATCH', 
+      //   body: { stock: newStockValue } 
+      // });
+
+      // Logic cập nhật state local giữ nguyên để UI mượt mà
+      setReportData(prev =>
+        prev
+          ? prev
+              .map(item => (item.id === selectedItem.id ? { ...item, stock: newStockValue } : item))
+              .filter(item => item.stock <= threshold)
+          : null
+      );
+
+      alert(`✅ Đã cập nhật tồn kho thành công!`);
+      handleCloseModal();
+    } catch (err: any) {
+      setError(err.message || 'Lỗi khi cập nhật tồn kho.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   // Effects

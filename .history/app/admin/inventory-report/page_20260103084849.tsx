@@ -172,18 +172,6 @@ const InventoryReportPage = () => {
       setError(err.message);
     }
   };
-  const fetchSalesData = async () => {
-    setLoading(true);
-    try {
-      const endpoint = `/reports/sales-performance?type=${salesType}&period=${salesPeriod}&limit=${salesLimit}`;
-      const data = await apiFetch<SalesPerformanceItem[]>(endpoint);
-      setSalesReportData(data);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
 
   // Effects
