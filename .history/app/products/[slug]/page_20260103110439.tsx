@@ -92,7 +92,6 @@ export default async function ProductDetail({ params }: Props) {
               <Image
                 src={product.images[0]}
                 alt={product.name}
-                unoptimized
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
