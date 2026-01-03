@@ -32,7 +32,7 @@ interface Product {
 async function getProduct(slug: string): Promise<Product | null> {
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
   try {
-   const res = await fetch(`${API_URL}/products/${slug}`, {
+    const res = await fetch(`http://localhost:3001/products/${slug}`, {
       cache: "no-store",
     });
 
@@ -71,8 +71,6 @@ export default async function ProductDetail({ params }: Props) {
   }
 
   const isAccessory = product.categoryId === 3;
-  const rawImageUrl = product.images?.[0] || "";
-  const displayImageUrl = rawImageUrl.trim();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black py-12 px-4">
@@ -90,14 +88,13 @@ export default async function ProductDetail({ params }: Props) {
         <div className="bg-slate-900/80 backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl border border-slate-800/50 flex flex-col lg:flex-row hover:shadow-green-500/30 transition-shadow duration-300">
           {/* Cột Ảnh */}
           <div className="lg:w-1/2 relative h-[450px] lg:h-auto overflow-hidden bg-gradient-to-br from-slate-900 to-black flex items-center justify-center">
-            {displayImageUrl ? (
+            {product.images?.[0] ? (
               <Image
                 src={product.images[0]}
                 alt={product.name}
                 unoptimized
                 fill
                 priority
-                referrerPolicy="no-referrer"
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain p-8 lg:p-20 transition-transform duration-500 hover:scale-105"
               />

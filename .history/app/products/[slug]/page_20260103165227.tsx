@@ -97,7 +97,6 @@ export default async function ProductDetail({ params }: Props) {
                 unoptimized
                 fill
                 priority
-                referrerPolicy="no-referrer"
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain p-8 lg:p-20 transition-transform duration-500 hover:scale-105"
               />

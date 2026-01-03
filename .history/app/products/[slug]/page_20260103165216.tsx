@@ -90,14 +90,13 @@ export default async function ProductDetail({ params }: Props) {
         <div className="bg-slate-900/80 backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl border border-slate-800/50 flex flex-col lg:flex-row hover:shadow-green-500/30 transition-shadow duration-300">
           {/* Cột Ảnh */}
           <div className="lg:w-1/2 relative h-[450px] lg:h-auto overflow-hidden bg-gradient-to-br from-slate-900 to-black flex items-center justify-center">
-            {displayImageUrl ? (
+            {displayI ? (
               <Image
                 src={product.images[0]}
                 alt={product.name}
                 unoptimized
                 fill
                 priority
-                referrerPolicy="no-referrer"
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain p-8 lg:p-20 transition-transform duration-500 hover:scale-105"
               />
