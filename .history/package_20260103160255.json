@@ -1,7 +1,7 @@
 {
   "name": "store-frontend",
   "version": "0.1.0",
-  "type": "commonjs",
+  "type"
   "private": true,
   "scripts": {
     "dev": "next dev",
