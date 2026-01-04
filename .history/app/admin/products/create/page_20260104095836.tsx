@@ -185,7 +185,14 @@ export default function CreateProductPage() {
       price: priceNum,
       images: images.map(img => img.url),
       categoryId: categoryId || undefined,
-      variants: processedVariants,
+      variants: variants
+        .filter(v => v.sizeValue && Number(v.stock) >= 0)
+        .map(v => ({
+          sizeValue: v.sizeValue,
+          color: v.color,
+          stock: Number(v.stock),
+          sku: v.sku,
+        })),
       sizeType,
       sizeOptions: sizeType !== SizeType.NONE ? sizeOptions : undefined,
       sizeIncreaseThreshold: sizeType !== SizeType.NONE && sizeIncreaseThreshold ? sizeIncreaseThreshold : undefined,

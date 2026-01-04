@@ -186,6 +186,7 @@ export default function CreateProductPage() {
       images: images.map(img => img.url),
       categoryId: categoryId || undefined,
       variants: processedVariants,
+      
       sizeType,
       sizeOptions: sizeType !== SizeType.NONE ? sizeOptions : undefined,
       sizeIncreaseThreshold: sizeType !== SizeType.NONE && sizeIncreaseThreshold ? sizeIncreaseThreshold : undefined,
